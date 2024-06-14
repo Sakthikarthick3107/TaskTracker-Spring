@@ -1,7 +1,7 @@
 import React from 'react'
 
 type CustomButtonType = {
-    children ?: string,
+    children ?: React.ReactNode,
     onClick ?: () => void,
     className ?: string
 }

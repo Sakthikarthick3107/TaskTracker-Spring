@@ -1,13 +1,19 @@
-import { SET_THEME, ToggleThemeAction } from "./themeActions";
+import { SET_THEME ,
+        SET_PRIMARY ,  
+        ToggleThemeAction ,
+        SetPrimaryAction
+    } from "./themeActions";
 
 export type ThemeState = {
-    isDark : boolean
+    isDark : boolean,
+    primary : string
 }
 
-export type ThemeAction = ToggleThemeAction ;
+export type ThemeAction = ToggleThemeAction | SetPrimaryAction ;
 
 const initialState : ThemeState = {
-    isDark : localStorage.getItem('isDark') === 'true'
+    isDark : localStorage.getItem('isDark') === 'true',
+    primary : localStorage.getItem('primary') || '#24689c'
 }
 
 let newIsDark; 
@@ -20,6 +26,12 @@ export const themeReducer = (state = initialState , action : ThemeAction) : Them
             return{
                 ...state,
                 isDark : !state.isDark
+            }
+        case SET_PRIMARY:
+            localStorage.setItem('primary' ,action.payload);
+            return{
+                ...state,
+                primary : action.payload
             }
         default:
             return state

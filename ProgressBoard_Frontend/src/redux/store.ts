@@ -1,6 +1,6 @@
 import { combineReducers, legacy_createStore as createStore , applyMiddleware } from "redux";
 import { ThemeState, themeReducer } from "./theme/themeReducer";
-import { composeWithDevTools } from "redux-devtools-extension";
+import { composeWithDevTools } from "@redux-devtools/extension";
 import { thunk } from "redux-thunk";
 import { TaskState, taskReducer } from "./task/taskReducer";
 

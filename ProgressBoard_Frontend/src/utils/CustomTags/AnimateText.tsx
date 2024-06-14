@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 type AnimateTextType = {
-    children : string,
+    children : React.ReactNode,
     duration : number,
     className ?: string
 }

@@ -12,8 +12,9 @@ export default {
         'poppins' : ['Poppins' , 'sans-serif']
       },
       colors:{
-        primary : '#aa0f44',
+        // primary : '#aa0f44',
         // primary : '#24689c',
+        primary : 'var(--color-primary)',
         secondary : '#f4f4f5',
         background : '#F0F8FF',
         text : '#1a1a1a',

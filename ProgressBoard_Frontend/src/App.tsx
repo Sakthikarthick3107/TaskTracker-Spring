@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setTaskData } from './redux/task/taskAction';
 import Button from './utils/CustomTags/Button';
 import { RootState } from './redux/store';
+import Tooltip from './utils/CustomTags/Tooltip';
 
 function App() {
   const dispatch = useDispatch();
@@ -33,7 +34,10 @@ function App() {
           <AnimateText className='text-4xl text-primary font-bold' duration={200}>Hello Sakthikarthick</AnimateText>
           <AnimateText duration={500}>Welcome back</AnimateText>
         </div>
-        <Button>Add Task</Button>
+        <Tooltip message='Create New Task' >
+          <Button>Add Task</Button> 
+        </Tooltip>
+        
       </div>
       
       <div className='w-full h-[75vh]  flex flex-row justify-around my-2 gap-2'>
@@ -43,6 +47,7 @@ function App() {
               <p className='text-center    px-2 py-1 '>
                 {status}
               </p>
+              
               <p className='text-xs bg-primary text-white font-semibold rounded-full h-5 w-5 flex items-center justify-center'>
                 {tasks.length}
               </p>
