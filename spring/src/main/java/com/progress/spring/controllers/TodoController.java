@@ -1,0 +1,40 @@
+package com.progress.spring.controllers;
+
+import com.progress.spring.models.Todo;
+import com.progress.spring.services.TodoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/tasks")
+@Tag(name="Task API" , description = "")
+public class TodoController {
+
+    @Autowired
+    private TodoService todoService;
+
+    @GetMapping
+    @Operation(summary = "All Tasks")
+    public List<Todo> allTasks(){
+        return todoService.allTasks();
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Task by Id")
+    public Todo getTaskById(@PathVariable Integer id){
+        return todoService.getTaskById(id);
+    }
+
+    @PostMapping
+    @Operation(summary = "Create Task")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Todo createNewTask(@RequestBody Todo newTask){
+        return todoService.createNewTask(newTask);
+    }
+}
