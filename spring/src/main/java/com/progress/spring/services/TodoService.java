@@ -33,6 +33,20 @@ public class TodoService {
         return todoRepository.save(newTodo);
     }
 
+    public Todo updateTask(Todo newTask , Integer taskid){
+        Todo getTask =todoRepository.findById(taskid).orElseThrow(() -> new RuntimeException("Task Not Found"));
+        getTask.setTaskname(newTask.getTaskname());
+        getTask.setDescription(newTask.getDescription());
+        getTask.setPriority(newTask.getPriority());
+        getTask.setEndDate(newTask.getEndDate());
+        getTask.setStatus(newTask.getStatus());
+        return todoRepository.save(getTask);
+    }
+
+    public void deleteTask(Integer  taskid){
+        Todo getTask =todoRepository.findById(taskid).orElseThrow(() -> new RuntimeException("Task Not Found"));
+        todoRepository.delete(getTask);
+    }
 
 
 }

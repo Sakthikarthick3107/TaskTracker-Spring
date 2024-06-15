@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { handleNotification, handleTaskDrawer } from '../redux/UIManagement/UiActions'
 import { RootState } from '../redux/store'
 import { ArrowLeftRounded } from '@mui/icons-material'
-import LineInput from './CustomTags/LineInput'
+import InputField from './CustomTags/InputField'
 import Button from './CustomTags/Button'
 import SelectInput from './CustomTags/SelectInput'
 import API from '../config/API'
+import DateInput from './CustomTags/DateInput'
 
 
 
@@ -18,7 +19,7 @@ const NewTask : React.FC = () => {
                                             taskname : '',
                                             description : '',
                                             status : 'Todo',
-                                            enddate : "",
+                                            endDate : "",
                                             priority : 'Low'
                                         });
     
@@ -38,7 +39,7 @@ const NewTask : React.FC = () => {
         }
     }
 
-    const handleNewTaskData = (event : ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleNewTaskData = (event : ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const {name , value} = event.target;
         setNewTask({ ...newTask , [name] : value });
     }
@@ -50,7 +51,7 @@ const NewTask : React.FC = () => {
         .then((response) => {
             dispatch(handleNotification(`${response.data.taskname} created successfully` , 'success'));
             console.log(response)
-            setNewTask({taskname : '' , description : '' , status : 'Todo' , enddate: '' , priority : 'Low'})
+            setNewTask({taskname : '' , description : '' , status : 'Todo' , endDate: '' , priority : 'Low'})
             closeTaskDrawer();
         })
         .catch((err) =>{
@@ -78,10 +79,12 @@ const NewTask : React.FC = () => {
     <button onClick={closeTaskDrawer}><ArrowLeftRounded fontSize='large' />Close</button>
 
     <form onSubmit={createNewTask} className='flex flex-col gap-4 py-4'>
-        <LineInput placeholder='New Task Name' name='taskname' value={newTask.taskname} onChange={handleNewTaskData}  />
-        <LineInput placeholder='Add description' name='description' value={newTask.description} onChange={handleNewTaskData} />
-        <SelectInput name='status' value={newTask.status} onChange={handleNewTaskData} options={['Todo' , 'Progress' , 'Completed' , 'Withdrawn']} />
+        <InputField type='text' placeholder='New Task Name' name='taskname' value={newTask.taskname} onChange={handleNewTaskData}  />
+        <InputField type='textarea' placeholder='Add description' name='description' value={newTask.description} onChange={handleNewTaskData} />
+        <SelectInput  name='status' value={newTask.status} onChange={handleNewTaskData} options={['Todo' , 'Progress' , 'Completed' , 'Withdrawn']} />
         <SelectInput name='priority' value={newTask.priority} onChange={handleNewTaskData} options={['Low' , 'Medium' , 'High']} />
+        <DateInput name='endDate' value={newTask.endDate} onChange={handleNewTaskData} />
+        
         <Button type='submit' className='w-full'>Create</Button>
     </form>
 

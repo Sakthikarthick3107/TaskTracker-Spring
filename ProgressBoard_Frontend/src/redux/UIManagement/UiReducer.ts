@@ -1,6 +1,7 @@
-import { NOTIFICATION_POPUP, NotificationAction, TASK_DRAWER , TaskDrawerAction } from "./UiActions";
+import { TaskData } from "../task/taskAction";
+import { NOTIFICATION_POPUP, NotificationAction, TASK_DETAIL, TASK_DRAWER , TaskDetailAction, TaskDrawerAction } from "./UiActions";
 
-export type NotificationStatusType = '' | 'success' | 'error' 
+export type NotificationStatusType = '' | 'success' | 'error' | 'warning'
 
 export type NotificationType = {
     message : string,
@@ -10,7 +11,8 @@ export type NotificationType = {
 
 export type UIState = {
     taskDrawerOpen : boolean,
-    notification : NotificationType
+    notification : NotificationType,
+    taskDetail :  TaskData | null
 };
 
 
@@ -19,10 +21,11 @@ const initialState : UIState = {
     notification : {
         message : '',
         status : ''
-    }
+    },
+    taskDetail : null
 }
 
-type UIManagementAction = TaskDrawerAction | NotificationAction ;
+type UIManagementAction = TaskDrawerAction | NotificationAction | TaskDetailAction ;
 
 export const UiReducer = (state = initialState , action : UIManagementAction) : UIState => {
     switch(action.type){
@@ -39,7 +42,14 @@ export const UiReducer = (state = initialState , action : UIManagementAction) : 
                     message : action.payload.message,
                     status : action.payload.status
                 }
-            }
+            };
+        
+        case TASK_DETAIL:
+            return{
+                ...state,
+                taskDetail : action.payload
+            };
+        
         default:
             return state;
     }

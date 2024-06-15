@@ -37,4 +37,16 @@ public class TodoController {
     public Todo createNewTask(@RequestBody Todo newTask){
         return todoService.createNewTask(newTask);
     }
+
+    @PutMapping("/{taskid}")
+    @Operation(summary = "Update Task")
+    public Todo updateTask(@PathVariable Integer taskid , @RequestBody Todo task){
+        return todoService.updateTask(task,taskid);
+    }
+
+    @DeleteMapping("/{taskid}")
+    @Operation(summary = "Delete Task")
+    public void deleteTask(@PathVariable Integer taskid){
+        todoService.deleteTask(taskid);
+    }
 }

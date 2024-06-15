@@ -16,7 +16,7 @@ function App() {
       <Home/>
       <NewTask />
       <Notification/>
-      {/* <TaskDetail/> */}
+      <TaskDetail/>
     </div>
   )
 }
