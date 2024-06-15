@@ -10,28 +10,28 @@ const API = axios.create({
     }
 });
 
-API.interceptors.request.use(
-    (config) => {
+// API.interceptors.request.use(
+//     (config) => {
 
-      return config;
-    },
-    (error) => {
+//       return config;
+//     },
+//     (error) => {
      
-      return Promise.reject(error);
-    }
-  );
+//       return Promise.reject(error);
+//     }
+//   );
   
  
-  API.interceptors.response.use(
-    (response) => {
+//   API.interceptors.response.use(
+//     (response) => {
      
-      return response;
-    },
-    (error) => {
+//       return response;
+//     },
+//     (error) => {
     
-      return Promise.reject(error);
-    }
-  );
+//       return Promise.reject(error);
+//     }
+//   );
   
 
 export default API;
