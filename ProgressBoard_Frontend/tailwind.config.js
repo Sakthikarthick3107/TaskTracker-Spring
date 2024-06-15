@@ -19,7 +19,7 @@ export default {
         background : '#F0F8FF',
         text : '#1a1a1a',
         text2 : '#FFFFFF',
-        card:'#F9F6EE',
+        card:'#F5F5DC',
 
         dark : {
           background : '#1a1a1a',

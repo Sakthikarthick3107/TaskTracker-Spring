@@ -1,5 +1,6 @@
 package com.progress.spring.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
 
 @Getter
@@ -24,13 +24,19 @@ public class Todo {
     private String taskname;
     private String description;
 
-    @Column(name = "createdat" , nullable = false , updatable = false)
-    private Timestamp createdAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "startdate", nullable = false, updatable = false)
+    private Timestamp startDate;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "enddate")
+    private Date endDate;
+
+    private String priority;
     private String status;
 
     @PrePersist
-    protected void onCreate(){
-        createdAt = new Timestamp(System.currentTimeMillis());
+    protected void onCreate() {
+        startDate = new Timestamp(System.currentTimeMillis());
     }
 }

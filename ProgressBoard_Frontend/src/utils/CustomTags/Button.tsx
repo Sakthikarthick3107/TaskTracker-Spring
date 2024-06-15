@@ -1,17 +1,26 @@
 import React from 'react'
 
-type CustomButtonType = {
+type ButtonType = {
     children ?: React.ReactNode,
     onClick ?: () => void,
-    className ?: string
+    className ?: string,
+    type ?: 'submit' | 'reset'
 }
 
-const CustomButton : React.FC<CustomButtonType> = ({children , onClick , className}) => {
+const Button : React.FC<ButtonType> = ({children , onClick , className , type}) => {
   return (
-    <button className={`text-white text-lg transition duration-100 ease-in-out bg-primary px-4 py-1 hover:bg-primary/60 rounded-lg shadow-sm shadow-black ${className}`} onClick={onClick}>
+    <button 
+          className = {`text-white text-lg 
+                      transition duration-100 
+                      ease-in-out bg-primary px-4 py-1 
+                      hover:bg-primary/60 rounded-lg shadow-sm 
+                      shadow-black/50 ${className}`} 
+                      onClick={onClick}
+                      type={type}
+                      >
         {children}
     </button>
   )
 }
 
-export default CustomButton
+export default Button

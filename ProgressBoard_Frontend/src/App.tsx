@@ -1,6 +1,8 @@
 import Header from './utils/Header';
 import Home from './pages/Home';
 import NewTask from './utils/NewTask';
+import Notification from './utils/CustomTags/Notification';
+import TaskDetail from './utils/TaskDetail';
 // import { useSelector } from 'react-redux';
 // import { RootState } from './redux/store';
 
@@ -13,6 +15,8 @@ function App() {
       <Header/>
       <Home/>
       <NewTask />
+      <Notification/>
+      {/* <TaskDetail/> */}
     </div>
   )
 }

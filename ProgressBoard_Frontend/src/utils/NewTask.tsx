@@ -1,19 +1,29 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
+import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { handleTaskDrawer } from '../redux/UIManagement/UiActions'
+import { handleNotification, handleTaskDrawer } from '../redux/UIManagement/UiActions'
 import { RootState } from '../redux/store'
 import { ArrowLeftRounded } from '@mui/icons-material'
 import LineInput from './CustomTags/LineInput'
+import Button from './CustomTags/Button'
+import SelectInput from './CustomTags/SelectInput'
+import API from '../config/API'
 
 
 
 
 const NewTask : React.FC = () => {
     const newTaskOpen = useSelector((state : RootState) => state.ui.taskDrawerOpen);
+
     const[newTask , setNewTask] = useState({
-                                            taskName : '',
-                                            description : ''
+                                            taskname : '',
+                                            description : '',
+                                            status : 'Todo',
+                                            enddate : "",
+                                            priority : 'Low'
                                         });
+    
+
+
 
     const dispatch = useDispatch();
     const drawerRef = useRef<HTMLDivElement>(null);
@@ -28,9 +38,25 @@ const NewTask : React.FC = () => {
         }
     }
 
-    const handleNewTaskData = (event : ChangeEvent<HTMLInputElement>) => {
+    const handleNewTaskData = (event : ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const {name , value} = event.target;
         setNewTask({ ...newTask , [name] : value });
+    }
+
+    const createNewTask = ( e : FormEvent<HTMLFormElement> ) => {
+        e.preventDefault();
+        console.log(JSON.stringify(newTask));
+        API.post('/tasks' , newTask)        
+        .then((response) => {
+            dispatch(handleNotification(`${response.data.taskname} created successfully` , 'success'));
+            console.log(response)
+            setNewTask({taskname : '' , description : '' , status : 'Todo' , enddate: '' , priority : 'Low'})
+            closeTaskDrawer();
+        })
+        .catch((err) =>{
+            dispatch(handleNotification(err.message , 'error'));
+        })
+              
     }
 
     useEffect(() => {
@@ -39,8 +65,8 @@ const NewTask : React.FC = () => {
     },[]);
 
   return (
-    <div ref={drawerRef} className={`bg-text2 
-                dark:bg-dark-text2 z-50 drop-shadow-lg
+    <div ref={drawerRef} className={` bg-card
+                 dark:bg-dark-card z-50 drop-shadow-lg
                  fixed top-0   
                  rounded-l-3xl 
                  right-0 w-1/2 h-full
@@ -51,9 +77,12 @@ const NewTask : React.FC = () => {
 
     <button onClick={closeTaskDrawer}><ArrowLeftRounded fontSize='large' />Close</button>
 
-    <form>
-        <LineInput placeholder='New Task Name' name='taskName' value={newTask.taskName} onChange={handleNewTaskData}  />
-
+    <form onSubmit={createNewTask} className='flex flex-col gap-4 py-4'>
+        <LineInput placeholder='New Task Name' name='taskname' value={newTask.taskname} onChange={handleNewTaskData}  />
+        <LineInput placeholder='Add description' name='description' value={newTask.description} onChange={handleNewTaskData} />
+        <SelectInput name='status' value={newTask.status} onChange={handleNewTaskData} options={['Todo' , 'Progress' , 'Completed' , 'Withdrawn']} />
+        <SelectInput name='priority' value={newTask.priority} onChange={handleNewTaskData} options={['Low' , 'Medium' , 'High']} />
+        <Button type='submit' className='w-full'>Create</Button>
     </form>
 
     </div>

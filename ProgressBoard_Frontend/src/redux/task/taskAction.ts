@@ -5,7 +5,9 @@ export type TaskData = {
     taskid: number,
     taskname: string,
     description: string,
-    dateCreated: string,
+    startDate : string,
+    endDate : string,
+    priority : string
     status: string
   }
 
