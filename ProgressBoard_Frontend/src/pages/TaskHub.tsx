@@ -14,10 +14,14 @@ import '../index.css'
 import { TaskStatusData } from '../redux/task/taskReducer';
 import TaskColumn from '../utils/TaskColumn';
 import BrowserNotification from '../config/BrowserNotification';
+import NewTask from '../utils/NewTask';
+import TaskDetail from '../utils/TaskDetail';
+import Options from '../utils/Options';
 
-const Home = () => {
+const TaskHub = () => {
     const dispatch = useDispatch();
   const userTasks  = useSelector((state : RootState) => state.task.tasks);
+  const isOptionOpen = useSelector((state : RootState) => state.ui.areOptionsOpen);
 
   const fetchAllTasks = () => {
     try {
@@ -71,7 +75,7 @@ const Home = () => {
   };
 
   return (
-    <>
+    <div className={`w-full h-full `}>
     <div  className='flex flex-row w-full items-center justify-between'>
         <div>
           <AnimateText className='text-4xl text-primary font-bold' duration={200}>Hello Sakthikarthick</AnimateText>
@@ -83,7 +87,7 @@ const Home = () => {
         
       </div>
       
-      <div className='w-full h-[75vh]  flex flex-row justify-around my-2 gap-2'>
+      <div className='w-full h-[75vh]  flex flex-row justify-around my-2 gap-2 overflow-x-auto'>
       {taskOrder.map(status => (
           userTasks[status] && (
             <TaskColumn
@@ -97,8 +101,13 @@ const Home = () => {
           )
         ))}
       </div>
-      </>
+        
+      <Header/>
+      <Options/>
+      <NewTask/>
+      <TaskDetail/>
+      </div>
   )
 }
 
-export default Home
+export default TaskHub

@@ -2,9 +2,10 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../redux/store';
 import { setPrimaryTheme, toggleTheme } from '../redux/theme/themeActions';
-import { DarkMode, LightMode } from '@mui/icons-material';
+import { DarkMode, LightMode, MenuRounded } from '@mui/icons-material';
 import Circle from './CustomTags/Circle';
 import Tooltip from './CustomTags/Tooltip';
+import { handleOptionsDrawer } from '../redux/UIManagement/UiActions';
 
 const Header : React.FC = () => {
     const dispatch = useDispatch();
@@ -16,7 +17,11 @@ const Header : React.FC = () => {
 
     const handlePrimaryChange = (primary : string) => {
       dispatch(setPrimaryTheme(primary));
-    } 
+    } ;
+
+    const handleOptionDrawer = () => {
+      dispatch(handleOptionsDrawer());
+    }
 
     useEffect(() => {
         if(isDark){
@@ -35,6 +40,9 @@ const Header : React.FC = () => {
   return (
     <div className=' z-30  w-full h-12 flex flex-row items-center justify-between px-6 fixed top-0 left-0 drop-shadow-md bg-secondary dark:bg-dark-secondary'>
       <div className='flex flex-row items-center gap-2'>
+        
+        <MenuRounded onClick={handleOptionDrawer} />
+
         <Tooltip message='Set Blue as Primary' position='bottom'>
           <Circle active = {primary === '#24689c'} onClick={() => handlePrimaryChange('#24689c')} color='#24689c' />
         </Tooltip>

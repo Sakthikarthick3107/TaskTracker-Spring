@@ -34,7 +34,7 @@ const TaskCard : React.FC<TaskCardType> = ({task , onDragStart}) => {
 
 
   return (
-    <div draggable onDragStart={(event) => onDragStart(event,task.taskid)}  onClick={setTaskDetail}
+    <AnimateText duration={300} draggable onDragStart={(event) => onDragStart(event,task.taskid)}  onClick={setTaskDetail}
         className='w-full bg-card dark:bg-dark-card drop-shadow-md p-2 rounded-lg min-h-[18vh] group cursor-pointer'>
         <p className='font-medium text-lg text-primary'>{task.taskname}</p>
         <p className='text-sm'>{task.description}</p>
@@ -48,7 +48,7 @@ const TaskCard : React.FC<TaskCardType> = ({task , onDragStart}) => {
           </p>
         </div>
         
-    </div>
+    </AnimateText>
   )
 }
 

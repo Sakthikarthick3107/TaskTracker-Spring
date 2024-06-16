@@ -4,6 +4,7 @@ import { NotificationStatusType, NotificationType } from "./UiReducer";
 export const TASK_DRAWER = 'TASK_DRAWER';
 export const NOTIFICATION_POPUP = 'NOTIFICATION_POPUP';
 export const TASK_DETAIL = 'TASK_DETAIL';
+export const OPTIONS_DRAWER = 'OPTIONS_DRAWER';
 
 export type TaskDrawerAction = {
     type : typeof TASK_DRAWER,
@@ -20,6 +21,10 @@ export type TaskDetailAction = {
     payload : TaskData | null
 };
 
+export type OptionsDrawerAction = {
+    type : typeof OPTIONS_DRAWER
+}
+
 
 export const handleTaskDrawer = (isOpen : boolean) => ({
     type : TASK_DRAWER,
@@ -35,3 +40,7 @@ export const setTaskData = (data : TaskData) => ({
     type : TASK_DETAIL,
     payload : data
 });
+
+export const handleOptionsDrawer = () => ({
+    type : OPTIONS_DRAWER
+})

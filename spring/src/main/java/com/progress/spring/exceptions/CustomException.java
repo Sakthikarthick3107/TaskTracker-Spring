@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class CustomException {
 
-    @ExceptionHandler(TaskNotFoundException.class)
-    public ResponseEntity<String> handleTaskNotFoundException(TaskNotFoundException ex){
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<String> handleTaskNotFoundException(NotFoundException ex){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"err\": \"" + ex.getMessage() + "\"}");
     }
 }

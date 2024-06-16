@@ -7,7 +7,13 @@ export default {
   ],
   theme: {
     extend: {
-
+      transitionProperty:{
+        'transform' : 'transform'
+      },
+      translate: {
+        '0': '0',
+        '[10%]': '10%',
+      },
       fontFamily:{
         'poppins' : ['Poppins' , 'sans-serif']
       },

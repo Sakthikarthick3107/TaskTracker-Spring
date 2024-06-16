@@ -5,10 +5,11 @@ type AnimateTextType = {
     duration : number,
     className ?: string,
     onClick ?:  ()=> void,
-    onDragStart ?: (event : React.DragEvent<HTMLDivElement>) => void
+    draggable ?: boolean,
+    onDragStart ?: (event: React.DragEvent<HTMLDivElement>, taskId: string) => void;
 }
 
-const AnimateText : React.FC<AnimateTextType> = ({children , duration , className , onClick , onDragStart}) => {
+const AnimateText : React.FC<AnimateTextType> = ({children , duration , className , onClick , onDragStart , draggable}) => {
     const[visible , setVisible] = useState<boolean>(false);
 
 
@@ -20,7 +21,7 @@ const AnimateText : React.FC<AnimateTextType> = ({children , duration , classNam
     },[])
 
   return (
-    <div onDragStart={onDragStart}  onClick={onClick} className={`transition duration-500 ease-in-out ${visible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'} ${className}`}>
+    <div onDragStart={onDragStart} draggable={draggable}  onClick={onClick} className={`transition duration-500 ease-in-out ${visible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'} ${className}`}>
         {children}
     </div>
   )
