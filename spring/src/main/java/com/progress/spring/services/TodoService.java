@@ -1,6 +1,7 @@
 package com.progress.spring.services;
 
 
+import com.progress.spring.exceptions.TaskNotFoundException;
 import com.progress.spring.models.Todo;
 import com.progress.spring.repositories.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class TodoService {
         if (getTodo.isPresent()) {
             return getTodo.get();
         }
-        throw new RuntimeException("Todo with this id not exists");
+        throw new TaskNotFoundException("Todo with this id not exists");
     }
 
     public Todo createNewTask(Todo newTodo){
@@ -44,9 +45,14 @@ public class TodoService {
     }
 
     public void deleteTask(Integer  taskid){
-        Todo getTask =todoRepository.findById(taskid).orElseThrow(() -> new RuntimeException("Task Not Found"));
+        Todo getTask =todoRepository.findById(taskid).orElseThrow(() -> new TaskNotFoundException("Task Not Found"));
         todoRepository.delete(getTask);
     }
 
+    public Todo updateTaskStatus(Integer taskId , String newStatus){
+        Todo getTask = todoRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException("Task Not Found"));
+        getTask.setStatus(newStatus);
+        return todoRepository.save(getTask);
+    }
 
 }

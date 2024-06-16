@@ -49,4 +49,10 @@ public class TodoController {
     public void deleteTask(@PathVariable Integer taskid){
         todoService.deleteTask(taskid);
     }
+
+    @PatchMapping("/{taskid}/status")
+    @Operation(summary = "Update Task Status")
+    public Todo updateTaskStatus(@PathVariable Integer taskid ,@RequestBody String newStatus){
+        return todoService.updateTaskStatus(taskid , newStatus);
+    }
 }
