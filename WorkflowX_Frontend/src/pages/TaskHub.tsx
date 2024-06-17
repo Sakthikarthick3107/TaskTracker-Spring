@@ -2,18 +2,15 @@ import React, { ChangeEvent, useState } from 'react'
 import { useEffect } from 'react';
 import API from '../config/API';
 import Header from '../utils/Header';
-import AnimateText from '../utils/CustomTags/AnimateText';
 import { useDispatch, useSelector } from 'react-redux';
 import { setTaskData } from '../redux/task/taskAction';
 import Button from '../utils/CustomTags/Button';
 import { RootState } from '../redux/store'
 import Tooltip from '../utils/CustomTags/Tooltip';
-import TaskCard from '../utils/TaskCard';
 import { handleNotification, handleTaskDrawer } from '../redux/UIManagement/UiActions';
 import '../index.css'
 import { TaskStatusData } from '../redux/task/taskReducer';
 import TaskColumn from '../utils/TaskColumn';
-import BrowserNotification from '../config/BrowserNotification';
 import NewTask from '../utils/NewTask';
 import TaskDetail from '../utils/TaskDetail';
 import Options from '../utils/Options';
@@ -46,6 +43,7 @@ const TaskHub = () => {
   const taskOrder : (keyof TaskStatusData)[] = ['Todo', 'Progress', 'Completed', 'Withdrawn']
 
   useEffect(() => {
+    document.title = 'WorkflowX | TaskHub'
     fetchAllTasks();
   },[userTasks , filterPriority , filterName])
 

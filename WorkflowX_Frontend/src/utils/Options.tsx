@@ -83,7 +83,10 @@ const Options = () => {
                           </button>
                         </div>
                     </div>
-                    <button className='w-full text-left px-4 py-1 hover:bg-primary hover:text-white'>Projects</button>
+                    <Link to={'/workflow-dashboard/projects'}>
+                        <button className='w-full text-left px-4 py-1 hover:bg-primary hover:text-white'>Projects</button>
+                    </Link>
+                    
                     <button className='w-full text-left px-4 py-1 hover:bg-primary hover:text-white'>About</button>
                 </>
             }
