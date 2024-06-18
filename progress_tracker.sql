@@ -8,6 +8,10 @@ CREATE TABLE Todo (
 	priority varchar(10) DEFAULT 'Low' CHECK (priority IN('Low' , 'Medium' , 'High')
     status VARCHAR(20) DEFAULT 'Todo' CHECK (status IN ('Todo', 'Progress', 'Completed', 'Withdrawn'))
 );
+	
+ALTER TABLE Todo ADD COLUMN project VARCHAR(100) DEFAULT 'PR-2';
+ALTER TABLE Todo ADD CONSTRAINT fk_project FOREIGN KEY (project) REFERENCES Project(prid);
+
 
 
 INSERT INTO Todo (taskname, description, status, enddate) 
@@ -25,5 +29,36 @@ VALUES
     ('Withhdrawn Task', 'This is an example withdrawn task.', 'Withdrawn', '2024-06-25');
 
 select * from Todo;
+	
+CREATE SEQUENCE task_id_seq START 1;
 
-truncate table Todo;
+CREATE OR REPLACE FUNCTION generate_task_id() RETURNS TEXT AS $$
+DECLARE
+    next_id INTEGER;
+    task_id TEXT;
+BEGIN
+    SELECT nextval('task_id_seq') INTO next_id;
+    task_id := 'PR-' || next_id::TEXT;
+    RETURN task_id;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT generate_task_id();
+
+CREATE TABLE Project(
+	prid varchar(100) primary key,
+	name varchar(50) not null ,
+	description varchar(200) ,
+	createdat timestamp default CURRENT_TIMESTAMP,
+	startdate DATE,
+	enddate DATE
+)
+
+insert into Project(prid , name , description , startdate , enddate)values
+	(generate_task_id() , 'My Todo Project' , 'Testing Project for this' , '2024-06-12' , '2024-07-20')
+
+insert into Project(prid , name , description , startdate , enddate)values
+	(generate_task_id() , 'Dummy Project' , 'Side one for separating both' ,'2024-06-12' , '2024-12-12' )
+	
+select * from Project 
+select t from Todo t where t.project = 'PR-2';

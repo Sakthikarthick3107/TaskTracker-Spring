@@ -16,36 +16,78 @@ import TaskDetail from '../utils/TaskDetail';
 import Options from '../utils/Options';
 import InputField from '../utils/CustomTags/InputField';
 import SelectInput from '../utils/CustomTags/SelectInput';
+import { debounce } from '../config/debounce';
+import {  useLocation, useNavigate } from 'react-router-dom';
 
 const TaskHub = () => {
   const dispatch = useDispatch();
   const userTasks  = useSelector((state : RootState) => state.task.tasks);
   const isOptionOpen = useSelector((state : RootState) => state.ui.areOptionsOpen);
-  const [filterPriority , setFilterPriority] = useState<string>('');
-  const [filterName , setFilterName] = useState<string>('');
 
-  const fetchAllTasks = () => {
-    let url = '/tasks';
-    if(filterPriority !== ''){
-      url += `/priority=${filterPriority}`;
-    }
-    if(filterName !== ''){
-      url += `/name=${filterName}`;
-    }
+  const navigate =  useNavigate();
+  const location = useLocation();
+
+  const queryParams = new URLSearchParams(location.search);
+  const initialFilterPriority = queryParams.get('priority') || '';
+  const initialFilterTaskName = queryParams.get('taskName') || '';
+
+  const [filterPriority , setFilterPriority] = useState<string>(initialFilterPriority);
+  const [filterName , setFilterName] = useState<string>(initialFilterTaskName);
+
+  const fetchAllTasks = debounce (() => {
+    let url = `project/PR-2/tasks`;
+    // const params = [];
+    // if (filterPriority)  params.push(`priority=${encodeURIComponent(filterPriority)}`);
+    // if (filterName)   params.push(`taskName=${encodeURIComponent(filterName)}`);
+
+    // if (params.length > 0) url += '/search?' + params.join('&');
+
+    const params = new URLSearchParams();
+    if(filterPriority) params.set('priority' , filterPriority);
+    if(filterName) params.set('taskName' , filterName);
+
+    const queryString = params.toString();
+    if(queryString) url += '/search?' + queryString;
+
+    
     try {
       API.get(`${url}`)
       .then(response => dispatch(setTaskData(response.data)));
     } catch (error) {
       console.log(error)
     }
-  }
+  },800)
+
+ 
 
   const taskOrder : (keyof TaskStatusData)[] = ['Todo', 'Progress', 'Completed', 'Withdrawn']
 
   useEffect(() => {
     document.title = 'WorkflowX | TaskHub'
     fetchAllTasks();
-  },[userTasks , filterPriority , filterName])
+  },[userTasks , filterPriority , filterName]);
+
+  const handleTaskPriorityFilter = (e: ChangeEvent<HTMLSelectElement>) => {
+    setFilterPriority(e.target.value);
+    updateUrl('priority', e.target.value);
+  };
+
+  const handleTaskNameSearch = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFilterName(e.target.value);
+    updateUrl('taskName', e.target.value);
+  };
+
+
+  const updateUrl = (param: string, value: string) => {
+    const searchParams = new URLSearchParams(location.search);
+    if (value) {
+      searchParams.set(param, value);
+    } else {
+      searchParams.delete(param);
+    }
+    const queryString = searchParams.toString();
+    navigate(`${location.pathname}${queryString ? `?${queryString}` : ''}`);
+  };
 
   const openTaskDrawer = () => {
     dispatch(handleTaskDrawer(true));
@@ -59,7 +101,7 @@ const TaskHub = () => {
   const handleDrop = (event : React.DragEvent<HTMLDivElement> , newStatus : string) => {
     const taskId = parseInt(event.dataTransfer.getData('text/plain') , 10);
 
-    API.patch(`/tasks/${taskId}/status` , newStatus , {
+    API.patch(`project/task/patch/${taskId}/status` , newStatus , {
       headers:{
         'Content-Type' : 'text/plain'
       }
@@ -84,14 +126,14 @@ const TaskHub = () => {
   };
 
   return (
-    <div className={`w-full h-full text-text dark:text-dark-text   bg-background dark:bg-dark-background py-16  overflow-y-hidden`}>
+    <>
     <div  className={`flex flex-row py-1 px-8 items-end gap-10 justify-between transition-transform duration-500 ${isOptionOpen ? 'translate-x-[15%]   w-[85%]' : 'translate-x-0 w-full'}`}>
           <div className='flex-1 flex-row items-end'>
-            <InputField  value={filterName} onChange={(e : ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setFilterName(e.target.value)}   type='text' placeholder='Search task' />
+            <InputField  value={filterName} onChange={handleTaskNameSearch}   type='text' placeholder='Search task' />
           </div>
           
           <div className='flex flex-row items-end gap-10'>
-            <SelectInput name='priority' value={filterPriority} onChange={(e : ChangeEvent<HTMLSelectElement>) => setFilterPriority(e.target.value)}   options={['','Low' , 'Medium' , 'High']} />
+            <SelectInput name='priority' value={filterPriority} onChange={handleTaskPriorityFilter}   options={['','Low' , 'Medium' , 'High']} />
             <Tooltip message='Create New Task' position='top' >
               <Button onClick={openTaskDrawer}>Add Task</Button> 
             </Tooltip>
@@ -114,12 +156,8 @@ const TaskHub = () => {
           // )
         ))}
       </div>
-        
-      <Header/>
-      <Options/>
-      <NewTask/>
-      <TaskDetail/>
-      </div>
+      
+      </>
   )
 }
 

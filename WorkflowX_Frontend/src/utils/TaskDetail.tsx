@@ -10,11 +10,15 @@ import Button from './CustomTags/Button';
 import API from '../config/API';
 import { DeleteOutline } from '@mui/icons-material';
 import Tooltip from './CustomTags/Tooltip';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const TaskDetail = () => {
   const task = useSelector((state : RootState) => state.ui.taskDetail);
   const dispatch = useDispatch();
   const taskRef = useRef<HTMLDivElement>(null);
+
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const[editTask , setEditTask] = useState({
                                           taskid : 0,
@@ -24,6 +28,29 @@ const TaskDetail = () => {
                                           endDate : '',
                                           priority : ''
                                       });
+    
+        useEffect(() => {
+          const queryParams = new URLSearchParams(location.search);
+          const taskId = queryParams.get('taskId');
+                                    
+          if (taskId) {
+            if (!task || task.taskid.toString() !== taskId) {
+              API.get(`/tasks/project/PR-2/${taskId}`)
+                .then((response) => {
+                  
+                  if (response.status === 200) {
+                    dispatch(setTaskData(response.data));
+                  }
+                })
+                .catch((err) => {
+                  // console.log(err)
+                  dispatch(handleNotification(err.response.data.err, 'error'));
+                });
+            }
+          } else {
+            dispatch(setTaskData(null));
+          }
+        }, [location.search, dispatch]);
   
     useEffect(() => {
       if (task) {
@@ -35,6 +62,14 @@ const TaskDetail = () => {
           endDate: task.endDate,
           priority: task.priority
         });
+        const queryParams = new URLSearchParams(location.search);
+        queryParams.set('taskId',`${task.taskid}`),
+        navigate({search : queryParams.toString()});
+      }
+      else{
+        const queryParams = new URLSearchParams(location.search);
+        queryParams.delete('taskId'),
+        navigate({search : queryParams.toString()});
       }
     }, [task]);
 
@@ -65,7 +100,7 @@ const TaskDetail = () => {
 }
 
   const updateTaskData = () => {
-    API.put(`tasks/${task?.taskid}` , editTask)
+    API.put(`project/task/put/${task?.taskid}` , editTask)
     .then((response) => {
       if(response.status === 200){
         dispatch(handleNotification(`Updated Task ${task?.taskname}` , 'success'));
@@ -78,7 +113,7 @@ const TaskDetail = () => {
   }
 
   const deleteTask = () => {
-    API.delete(`tasks/${task?.taskid}`)
+    API.delete(`project/task/delete/${task?.taskid}`)
     .then((response) => {
       if(response.status === 200){
         dispatch(handleNotification(`Deleted ${task?.taskname}` , 'success'));

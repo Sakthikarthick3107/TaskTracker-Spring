@@ -8,6 +8,7 @@ import Button from './CustomTags/Button'
 import SelectInput from './CustomTags/SelectInput'
 import API from '../config/API'
 import DateInput from './CustomTags/DateInput'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 
 
@@ -16,6 +17,7 @@ const NewTask : React.FC = () => {
     const newTaskOpen = useSelector((state : RootState) => state.ui.taskDrawerOpen);
 
     const[newTask , setNewTask] = useState({
+                                            project : 'PR-2',
                                             taskname : '',
                                             description : '',
                                             status : 'Todo',
@@ -28,6 +30,19 @@ const NewTask : React.FC = () => {
 
     const dispatch = useDispatch();
     const drawerRef = useRef<HTMLDivElement>(null);
+    const navigate =  useNavigate();
+    const location = useLocation();
+
+    const updateQueryParams = (params : URLSearchParams) => {
+        const searchParams = new URLSearchParams(params);
+        if(newTaskOpen){
+            searchParams.set('create','true');
+        }
+        else{
+            searchParams.delete('create');
+        }
+        navigate({search : searchParams.toString()});
+    }
 
     const closeTaskDrawer = () => {
         dispatch(handleTaskDrawer(false));
@@ -47,11 +62,11 @@ const NewTask : React.FC = () => {
     const createNewTask = ( e : FormEvent<HTMLFormElement> ) => {
         e.preventDefault();
         console.log(JSON.stringify(newTask));
-        API.post('/tasks' , newTask)        
+        API.post('project/newtask' , newTask)        
         .then((response) => {
             dispatch(handleNotification(`${response.data.taskname} created successfully` , 'success'));
             console.log(response)
-            setNewTask({taskname : '' , description : '' , status : 'Todo' , endDate: '' , priority : 'Low'})
+            setNewTask({project : 'PR-2' , taskname : '' , description : '' , status : 'Todo' , endDate: '' , priority : 'Low'})
             closeTaskDrawer();
         })
         .catch((err) =>{
@@ -65,6 +80,20 @@ const NewTask : React.FC = () => {
         return () => document.removeEventListener('mousedown' , handleClickOutside);
     },[]);
 
+    useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        // if(queryParams.get('create')){
+        //     dispatch(handleTaskDrawer(true));
+        // }
+        updateQueryParams(queryParams);
+        
+        
+    },[newTaskOpen])
+
+
+
+   
+    
   return (
     <div ref={drawerRef} className={` bg-card
                  dark:bg-dark-card z-50 drop-shadow-lg

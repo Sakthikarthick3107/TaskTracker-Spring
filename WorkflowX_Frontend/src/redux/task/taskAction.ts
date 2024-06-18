@@ -8,7 +8,8 @@ export type TaskData = {
     startDate : string,
     endDate : string,
     priority : string
-    status: string
+    status: string,
+    project : string
   }
 
   export type SetTaskAction = {

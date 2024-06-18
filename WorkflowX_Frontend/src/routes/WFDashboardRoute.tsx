@@ -9,7 +9,7 @@ import TaskDetail from '../utils/TaskDetail'
 
 const WFDashboardRoute = () => {
   return (
-    <>
+    <div className={`w-full h-full text-text dark:text-dark-text   bg-background dark:bg-dark-background py-16  overflow-y-hidden`}>
         <Header/>
         <Options/>
         <NewTask/>
@@ -18,7 +18,7 @@ const WFDashboardRoute = () => {
             <Route path='/projects' element={<Projects/>}/>
             <Route path='/task' element={<TaskHub/>}/>
         </Routes>
-    </>
+    </div>
   )
 }
 

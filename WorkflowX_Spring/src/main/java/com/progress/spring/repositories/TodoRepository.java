@@ -7,17 +7,23 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TodoRepository extends JpaRepository<Todo,Integer> {
 
-    @Query("SELECT t from Todo t WHERE t.priority = :priority")
-    List<Todo> filterTaskByPriority(@Param("priority") String priority);
+    @Query("SELECT t from Todo t WHERE t.project = :project")
+    List<Todo> getTasksByProject(@Param("project") String project);
 
-    @Query("SELECT t FROM Todo t WHERE LOWER(t.taskname) LIKE LOWER(CONCAT('%', :taskname, '%'))")
-    List<Todo> filterTaskByTaskName(@Param("taskname") String taskname);
+    @Query("SELECT t from Todo t WHERE t.project = :project AND t.taskid = :taskid")
+    Optional<Todo> getTaskByProjectTaskId(@Param("project") String project , @Param("taskid") Integer id);
 
-    @Query("SELECT t from Todo t WHERE t.priority = :priority AND LOWER(t.taskname) LIKE LOWER(CONCAT('%', :taskname, '%'))")
-    List<Todo> filterTaskByNameAndPriority(@Param("priority") String priority , @Param("taskname") String taskname);
+    @Query("SELECT t FROM Todo t WHERE " +
+            "t.project = :project AND" +
+            "(:priority IS NULL OR :priority = '' OR t.priority = :priority) AND " +
+            "(:taskname IS NULL OR :taskname = '' OR LOWER(t.taskname) LIKE LOWER(CONCAT('%', :taskname, '%')))")
+    List<Todo> filterProjectTasks(@Param("project") String project ,@Param("priority") String priority, @Param("taskname") String taskname);
+
+
 
 }

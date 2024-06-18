@@ -19,7 +19,7 @@ const Welcome = () => {
             </div>
             
             <div>
-                <Link to={'workflow-dashboard/task'}>
+                <Link to={'workflow-dashboard/projects'}>
                 <AnimateText duration={1200}>
                     <button className='bg-[#24689c] px-4 py-2 text-text2 shadow-lg drop-shadow-lg rounded-md'>
                             Resume your journey

@@ -16,6 +16,18 @@ public class TodoService {
     @Autowired
     private TodoRepository todoRepository;
 
+    public List<Todo> tasksByProject(String id){
+        return todoRepository.getTasksByProject(id);
+    }
+
+    public Todo taskByProjectTaskId(String project , Integer taskId){
+        Optional<Todo> getTodo = todoRepository.getTaskByProjectTaskId(project , taskId);
+        if(getTodo.isPresent()){
+            return  getTodo.get();
+        }
+        throw new NotFoundException("Task Not Found");
+    }
+
     public List<Todo> allTasks(){
         return todoRepository.findAll();
     }
@@ -25,19 +37,11 @@ public class TodoService {
         if (getTodo.isPresent()) {
             return getTodo.get();
         }
-        throw new NotFoundException("Todo with this id not exists");
+        throw new NotFoundException("Task Not Found");
     }
 
-    public List<Todo> filterTaskByPriority(String priority){
-        return todoRepository.filterTaskByPriority(priority);
-    }
-
-    public List<Todo> filterTasksByTaskName(String taskName){
-        return todoRepository.filterTaskByTaskName(taskName);
-    }
-
-    public List<Todo> filterTaskByNameAndPriority(String taskName , String priority){
-        return todoRepository.filterTaskByNameAndPriority(taskName , priority);
+    public List<Todo> filterProjectTasks(String project , String priority , String taskName){
+        return todoRepository.filterProjectTasks(project , priority , taskName);
     }
 
     public Todo createNewTask(Todo newTodo){

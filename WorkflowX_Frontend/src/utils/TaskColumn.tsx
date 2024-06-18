@@ -17,7 +17,7 @@ const TaskColumn: React.FC<TaskColumnType> = ({ status, tasks, onDrop, onDragOve
             onDragOver={onDragOver}
             className='min-w-[300px] 2xl:min-w-[450px] flex flex-col gap-1 items-center'
         >
-            <div className='flex flex-row items-center justify-center w-full rounded-md bg-secondary dark:bg-dark-secondary drop-shadow-md'>
+            <div className='flex flex-row mb-4 items-center justify-center w-full rounded-md bg-secondary dark:bg-dark-secondary drop-shadow-md'>
                 <p className='text-center px-2 py-1'>
                     {status}
                 </p>

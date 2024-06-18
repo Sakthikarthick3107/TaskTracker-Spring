@@ -34,6 +34,7 @@ public class Todo {
 
     private String priority;
     private String status;
+    private String project;
 
     @PrePersist
     protected void onCreate() {
