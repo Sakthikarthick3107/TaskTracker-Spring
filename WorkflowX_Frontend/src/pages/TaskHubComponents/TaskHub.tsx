@@ -1,23 +1,21 @@
 import React, { ChangeEvent, useState } from 'react'
 import { useEffect } from 'react';
-import API from '../config/API';
-import Header from '../utils/Header';
+import API from '../../config/API';
 import { useDispatch, useSelector } from 'react-redux';
-import { setTaskData } from '../redux/task/taskAction';
-import Button from '../utils/CustomTags/Button';
-import { RootState } from '../redux/store'
-import Tooltip from '../utils/CustomTags/Tooltip';
-import { handleNotification, handleTaskDrawer } from '../redux/UIManagement/UiActions';
-import '../index.css'
-import { TaskStatusData } from '../redux/task/taskReducer';
-import TaskColumn from '../utils/TaskColumn';
-import NewTask from '../utils/NewTask';
-import TaskDetail from '../utils/TaskDetail';
-import Options from '../utils/Options';
-import InputField from '../utils/CustomTags/InputField';
-import SelectInput from '../utils/CustomTags/SelectInput';
-import { debounce } from '../config/debounce';
-import {  useLocation, useNavigate } from 'react-router-dom';
+import { setTaskData } from '../../redux/task/taskAction';
+import Button from '../../utils/CustomTags/Button'
+import { RootState } from '../../redux/store'
+import Tooltip from '../../utils/CustomTags/Tooltip';
+import { handleNotification, handleTaskDrawer } from '../../redux/UIManagement/UiActions';
+import '../../index.css'
+import { TaskStatusData } from '../../redux/task/taskReducer';
+import TaskColumn from './TaskColumn';
+import NewTask from './NewTask';
+import TaskDetail from './TaskDetail';
+import InputField from '../../utils/CustomTags/InputField';
+import SelectInput from '../../utils/CustomTags/SelectInput';
+import { debounce } from '../../config/debounce';
+import {  useLocation, useNavigate, useParams } from 'react-router-dom';
 
 const TaskHub = () => {
   const dispatch = useDispatch();
@@ -27,6 +25,8 @@ const TaskHub = () => {
   const navigate =  useNavigate();
   const location = useLocation();
 
+  const { projectId } = useParams<{ projectId : string }>();
+
   const queryParams = new URLSearchParams(location.search);
   const initialFilterPriority = queryParams.get('priority') || '';
   const initialFilterTaskName = queryParams.get('taskName') || '';
@@ -35,7 +35,7 @@ const TaskHub = () => {
   const [filterName , setFilterName] = useState<string>(initialFilterTaskName);
 
   const fetchAllTasks = debounce (() => {
-    let url = `project/PR-2/tasks`;
+    let url = `project/${projectId}/tasks`;
     // const params = [];
     // if (filterPriority)  params.push(`priority=${encodeURIComponent(filterPriority)}`);
     // if (filterName)   params.push(`taskName=${encodeURIComponent(filterName)}`);
@@ -86,7 +86,7 @@ const TaskHub = () => {
       searchParams.delete(param);
     }
     const queryString = searchParams.toString();
-    navigate(`${location.pathname}${queryString ? `?${queryString}` : ''}`);
+    navigate(`${location.pathname}${queryString ? `?${queryString}` : ''}`, { replace: true });
   };
 
   const openTaskDrawer = () => {
@@ -156,7 +156,8 @@ const TaskHub = () => {
           // )
         ))}
       </div>
-      
+      <NewTask projectId={ projectId ? projectId : ''} />
+      <TaskDetail/>
       </>
   )
 }

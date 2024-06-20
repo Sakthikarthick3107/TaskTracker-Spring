@@ -1,23 +1,26 @@
 import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { handleNotification, handleTaskDrawer } from '../redux/UIManagement/UiActions'
-import { RootState } from '../redux/store'
+import { handleNotification, handleTaskDrawer } from '../../redux/UIManagement/UiActions'
+import { RootState } from '../../redux/store'
 import { ArrowLeftRounded } from '@mui/icons-material'
-import InputField from './CustomTags/InputField'
-import Button from './CustomTags/Button'
-import SelectInput from './CustomTags/SelectInput'
-import API from '../config/API'
-import DateInput from './CustomTags/DateInput'
+import InputField from '../../utils/CustomTags/InputField'
+import Button from '../../utils/CustomTags/Button'
+import SelectInput from '../../utils/CustomTags/SelectInput'
+import API from '../../config/API'
+import DateInput from '../../utils/CustomTags/DateInput'
 import { useLocation, useNavigate } from 'react-router-dom'
 
+type NewTaskProps = {
+    projectId : string
+}
 
 
-
-const NewTask : React.FC = () => {
+const NewTask : React.FC<NewTaskProps> = ( {projectId }) => {
     const newTaskOpen = useSelector((state : RootState) => state.ui.taskDrawerOpen);
+    
 
     const[newTask , setNewTask] = useState({
-                                            project : 'PR-2',
+                                            project : projectId,
                                             taskname : '',
                                             description : '',
                                             status : 'Todo',

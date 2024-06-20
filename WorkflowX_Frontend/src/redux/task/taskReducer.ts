@@ -1,18 +1,20 @@
-import { SET_TASKS, SetTaskAction , TaskData } from "./taskAction";
+import { SET_TASKS,SET_SELECTED_TASK , SetTaskAction , SetSelectedTaskAction , TaskData } from "./taskAction";
 
 export type TaskStatusData = {
-    [status : string] : TaskData[]
+    [status : string] : TaskData[],
 }
 
 export type TaskState = {
-    tasks : '{}' | TaskStatusData
+    tasks : '{}' | TaskStatusData,
+    selectedTask : null | TaskData
 }
 
 const initialState : TaskState = {
-    tasks : {}
+    tasks : {},
+    selectedTask : null
 }
 
-export type TaskAction = SetTaskAction;
+export type TaskAction = SetTaskAction | SetSelectedTaskAction;
 
 
 export const taskReducer = (state = initialState , action : TaskAction) : TaskState =>{
@@ -30,6 +32,12 @@ export const taskReducer = (state = initialState , action : TaskAction) : TaskSt
             return{
                 ...state,
                 tasks : taskByCategory
+            }
+        
+        case SET_SELECTED_TASK:
+            return{
+                ...state,
+                selectedTask : action.payload
             }
         default:
             return state;

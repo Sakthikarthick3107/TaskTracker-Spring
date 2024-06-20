@@ -1,5 +1,5 @@
 import { TaskData } from "../task/taskAction";
-import { NOTIFICATION_POPUP, NotificationAction, OPTIONS_DRAWER, OptionsDrawerAction, TASK_DETAIL, TASK_DRAWER , TaskDetailAction, TaskDrawerAction } from "./UiActions";
+import { NOTIFICATION_POPUP, NotificationAction, OPTIONS_DRAWER, OptionsDrawerAction, TASK_DRAWER , TaskDrawerAction } from "./UiActions";
 
 export type NotificationStatusType = '' | 'success' | 'error' | 'warning'
 
@@ -24,10 +24,10 @@ const initialState : UIState = {
         status : ''
     },
     taskDetail : null,
-    areOptionsOpen : localStorage.getItem('drawer') === 'true'
+    areOptionsOpen : localStorage.getItem('drawer') === 'true' 
 }
 
-type UIManagementAction = TaskDrawerAction | NotificationAction | TaskDetailAction | OptionsDrawerAction ;
+type UIManagementAction = TaskDrawerAction | NotificationAction  | OptionsDrawerAction ;
 
 export const UiReducer = (state = initialState , action : UIManagementAction) : UIState => {
     let drawerOpen
@@ -46,12 +46,7 @@ export const UiReducer = (state = initialState , action : UIManagementAction) : 
                     status : action.payload.status
                 }
             };
-        
-        case TASK_DETAIL:
-            return{
-                ...state,
-                taskDetail : action.payload
-            };
+
         case OPTIONS_DRAWER:
             drawerOpen = !state.areOptionsOpen;
             localStorage.setItem('drawer' , drawerOpen.toString() )

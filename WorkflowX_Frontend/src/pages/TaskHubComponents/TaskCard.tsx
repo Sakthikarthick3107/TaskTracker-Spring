@@ -1,8 +1,8 @@
 import React from 'react'
-import { TaskData, setTaskData } from '../redux/UIManagement/UiActions'
+import { TaskData, setSelectedTask } from '../../redux/task/taskAction'
 import { useDispatch } from 'react-redux'
-import AnimateText from './CustomTags/AnimateText'
-import BrowserNotification from '../config/BrowserNotification'
+import AnimateText from '../../utils/CustomTags/AnimateText'
+import BrowserNotification from '../../config/BrowserNotification'
 
 type TaskCardType = {
     task : TaskData,
@@ -14,7 +14,7 @@ const TaskCard : React.FC<TaskCardType> = ({task , onDragStart}) => {
   const dispatch = useDispatch();
 
   const setTaskDetail = () => {
-    dispatch(setTaskData(task));
+    dispatch(setSelectedTask(task));
   }
 
   const getDueStatus = () => {

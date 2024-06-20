@@ -1,5 +1,5 @@
 import React from 'react';
-import { TaskData } from '../redux/task/taskAction';
+import { TaskData } from '../../redux/task/taskAction';
 import TaskCard from './TaskCard';
 
 type TaskColumnType = {

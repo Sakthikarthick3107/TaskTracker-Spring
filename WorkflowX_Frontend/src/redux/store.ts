@@ -4,11 +4,13 @@ import { composeWithDevTools } from "@redux-devtools/extension";
 import { thunk } from "redux-thunk";
 import { TaskState, taskReducer } from "./task/taskReducer";
 import { UIState, UiReducer } from "./UIManagement/UiReducer";
+import { ProjectState, projectReducer } from "./project/projectReducer";
 
 export interface RootState{
     theme : ThemeState,
     task : TaskState,
-    ui : UIState
+    ui : UIState,
+    project : ProjectState
 }
 
 const middleware = [thunk];
@@ -16,7 +18,8 @@ const middleware = [thunk];
 const rootReducer = combineReducers({
     theme : themeReducer,
     task : taskReducer,
-    ui : UiReducer
+    ui : UiReducer,
+    project :projectReducer
 });
 
 const store = createStore(

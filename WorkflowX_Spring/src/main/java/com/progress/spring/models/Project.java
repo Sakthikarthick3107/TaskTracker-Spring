@@ -21,15 +21,15 @@ import java.sql.Timestamp;
 @Table(name = "Project")
 public class Project {
     @Id
-    @Column(name = "prid" , nullable = false , updatable = false)
+    @Column(name = "prid", nullable = false, updatable = false)
     private String projectId;
 
-    @Column(name = "name" , nullable = false , updatable = false)
+    @Column(name = "name", nullable = false, updatable = false)
     private String projectName;
     private String description;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "createdat" , nullable = false , updatable = false)
+    @Column(name = "createdat", nullable = false, updatable = false)
     private Timestamp createdAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd")

@@ -1,19 +1,20 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../redux/store'
-import { handleNotification, setTaskData } from '../redux/UIManagement/UiActions';
-import AnimateText from './CustomTags/AnimateText';
-import InputField from './CustomTags/InputField';
-import SelectInput from './CustomTags/SelectInput';
-import DateInput from './CustomTags/DateInput';
-import Button from './CustomTags/Button';
-import API from '../config/API';
+import { RootState } from '../../redux/store'
+import { handleNotification } from '../../redux/UIManagement/UiActions';
+import AnimateText from '../../utils/CustomTags/AnimateText';
+import InputField from '../../utils/CustomTags/InputField';
+import SelectInput from '../../utils/CustomTags/SelectInput';
+import DateInput from '../../utils/CustomTags/DateInput';
+import Button from '../../utils/CustomTags/Button';
+import API from '../../config/API';
 import { DeleteOutline } from '@mui/icons-material';
-import Tooltip from './CustomTags/Tooltip';
+import Tooltip from '../../utils/CustomTags/Tooltip';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { setSelectedTask } from '../../redux/task/taskAction';
 
 const TaskDetail = () => {
-  const task = useSelector((state : RootState) => state.ui.taskDetail);
+  const task = useSelector((state : RootState) => state.task.selectedTask);
   const dispatch = useDispatch();
   const taskRef = useRef<HTMLDivElement>(null);
 
@@ -35,11 +36,11 @@ const TaskDetail = () => {
                                     
           if (taskId) {
             if (!task || task.taskid.toString() !== taskId) {
-              API.get(`/tasks/project/PR-2/${taskId}`)
+              API.get(`/project/PR-2/tasks/${taskId}`)
                 .then((response) => {
                   
                   if (response.status === 200) {
-                    dispatch(setTaskData(response.data));
+                    dispatch(setSelectedTask(response.data));
                   }
                 })
                 .catch((err) => {
@@ -48,7 +49,7 @@ const TaskDetail = () => {
                 });
             }
           } else {
-            dispatch(setTaskData(null));
+            dispatch(setSelectedTask(null));
           }
         }, [location.search, dispatch]);
   
@@ -64,12 +65,13 @@ const TaskDetail = () => {
         });
         const queryParams = new URLSearchParams(location.search);
         queryParams.set('taskId',`${task.taskid}`),
-        navigate({search : queryParams.toString()});
+        navigate({search : queryParams.toString()} , {replace : true});
       }
       else{
         const queryParams = new URLSearchParams(location.search);
         queryParams.delete('taskId'),
-        navigate({search : queryParams.toString()});
+        navigate({search : queryParams.toString()} , {replace : true});
+        // navigate(-1);
       }
     }, [task]);
 
@@ -89,7 +91,12 @@ const TaskDetail = () => {
         dispatch(handleNotification('Save changes before closing!', 'warning'));
       }
       else{
-        dispatch(setTaskData(null));
+        dispatch(setSelectedTask(null));
+        const queryParams = new URLSearchParams(location.search);
+        queryParams.delete('taskId'),
+        navigate({search : queryParams.toString()} , {replace : true});
+        // navigate(`${location.pathname}`, { replace: true });
+        // window.location.reload();
       }
     }
   }
@@ -104,7 +111,7 @@ const TaskDetail = () => {
     .then((response) => {
       if(response.status === 200){
         dispatch(handleNotification(`Updated Task ${task?.taskname}` , 'success'));
-        dispatch(setTaskData(null));
+        dispatch(setSelectedTask(null));
       }
     })
     .catch((err) => {
@@ -117,7 +124,7 @@ const TaskDetail = () => {
     .then((response) => {
       if(response.status === 200){
         dispatch(handleNotification(`Deleted ${task?.taskname}` , 'success'));
-        dispatch(setTaskData(null));
+        dispatch(setSelectedTask(null));
       }
     })
     .catch((err) =>{

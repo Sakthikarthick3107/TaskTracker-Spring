@@ -1,6 +1,5 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import TaskHub from '../pages/TaskHub'
 import Welcome from '../pages/Welcome'
 import WFDashboardRoute from './WFDashboardRoute'
 
